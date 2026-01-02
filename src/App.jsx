@@ -12,6 +12,7 @@ import AdminThongKe from "./pages/admin/thongKe"
 // route guard
 import PrivateRoute from "./routes/PrivateRoute"
 import VisitManagePage from "./pages/admin/visitManager"
+import PostManager from "./pages/admin/postManager"
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/thong-ke" element={<AdminThongKe />} />
           <Route path="/admin/visits" element={<VisitManagePage />} />
+          <Route path="/admin/posts" element={<PostManager />} />
 
         </Route>
 

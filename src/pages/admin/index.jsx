@@ -1,11 +1,20 @@
-import { CheckCircle2, Clock, Diameter, RollerCoaster, Users } from "lucide-react"
+import { CheckCircle2, Clock, RollerCoaster, Users, XCircle } from "lucide-react"
 import { Sidebar } from "../../components/SideBar"
 import { TopHeader } from "../../components/TopHeader"
 import { useEffect, useState } from "react"
 import { http } from "../../lib/http"
+import { Card, CardContent, CardTitle } from "../../components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/tabel"
+import { Button } from "../../components/ui/button"
+import { getRelationshipLabel } from "../../lib/getRelationshipLabel"
+import { formatVisit } from "../../lib/utils"
+import { Badge } from "../../components/ui/badge"
+import { RenderStatus } from "../../lib/renderStatus"
 
 export default function AdminDashboard() {
 
+    const [visits, setVisits] = useState([])
+    const [activeType, setActiveType] = useState(null)
     const [stats, setStats] = useState(null)
     useEffect(() => {
         const fetchStats = async () => {
@@ -16,6 +25,27 @@ export default function AdminDashboard() {
         }
         fetchStats()
     }, [])
+    const TABLE_TITLES = {
+        today: "Danh sách thăm thân hôm nay",
+        approved: "Danh sách thăm thân đã duyệt",
+        pending: "Danh sách thăm thân chờ duyệt",
+        month: "Danh sách thăm thân trong tháng",
+    }
+    const fetchVisits = async (type) => {
+        setActiveType(type)
+
+        let url = "/visits"
+
+        if (type === "today") url += "?range=today"
+        if (type === "month") url += "?range=month"
+        if (type === "approved") url = "/visits/status/approved"
+        if (type === "pending") url = "/visits/status/pending"
+
+        const res = await http.get(url)
+        setVisits(res.data)
+    }
+
+
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
@@ -37,6 +67,8 @@ export default function AdminDashboard() {
                             bgColor="bg-blue-50"
                             iconColor="text-blue-600"
                             icon={<Users />}
+                            onClick={() => fetchVisits("today")}
+                            active={activeType === "today"}
                         />
 
                         <StatCard
@@ -46,6 +78,8 @@ export default function AdminDashboard() {
                             bgColor="bg-emerald-50"
                             iconColor="text-emerald-600"
                             icon={<CheckCircle2 />}
+                            onClick={() => fetchVisits("approved")}
+                            active={activeType === "approved"}
                         />
 
                         <StatCard
@@ -55,6 +89,8 @@ export default function AdminDashboard() {
                             bgColor="bg-amber-50"
                             iconColor="text-amber-600"
                             icon={<Clock />}
+                            onClick={() => fetchVisits("pending")}
+                            active={activeType === "pending"}
                         />
 
                         <StatCard
@@ -64,8 +100,117 @@ export default function AdminDashboard() {
                             bgColor="bg-green-50"
                             iconColor="text-amber-600"
                             icon={<RollerCoaster />}
+                            onClick={() => fetchVisits("month")}
+                            active={activeType === "month"}
                         />
                     </div>
+                    {activeType && (
+                        <Card className="mb-8">
+                            <CardTitle className="p-6">
+                                {TABLE_TITLES[activeType] || "Danh sách thăm thân"}
+                            </CardTitle>
+
+                            <CardContent>
+                                {/* BẮT BUỘC: wrapper để scroll ngang */}
+                                <div className="relative overflow-x-auto">
+                                    <Table className="min-w-[1600px]">
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Người thăm</TableHead>
+                                                <TableHead>CCCD</TableHead>
+                                                <TableHead>Địa chỉ</TableHead>
+                                                <TableHead>Quan hệ</TableHead>
+                                                <TableHead>Quân nhân</TableHead>
+                                                <TableHead>Đơn vị</TableHead>
+                                                <TableHead>Thời gian</TableHead>
+                                                <TableHead>Số người</TableHead>
+                                                <TableHead>Mục đích</TableHead>
+                                                <TableHead>Trạng thái</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+
+                                        <TableBody>
+                                            {visits.map((v) => (
+                                                <TableRow key={v._id}>
+                                                    {/* Người thăm */}
+                                                    <TableCell>
+                                                        <div className="font-medium">{v.fullName}</div>
+                                                        <div className="text-sm text-muted-foreground">
+                                                            📞 {v.phoneNumber}
+                                                        </div>
+                                                    </TableCell>
+
+                                                    {/* CCCD */}
+                                                    <TableCell>{v.cccd}</TableCell>
+
+                                                    {/* Địa chỉ */}
+                                                    <TableCell className="max-w-[200px] truncate">
+                                                        {v.address}
+                                                    </TableCell>
+
+                                                    {/* Quan hệ */}
+                                                    <TableCell>
+                                                        {getRelationshipLabel(v.relationship)}
+                                                    </TableCell>
+
+                                                    {/* Quân nhân */}
+                                                    <TableCell>
+                                                        <div className="font-medium">
+                                                            {v.soldier?.fullName || "—"}
+                                                        </div>
+                                                        <div className="text-sm text-muted-foreground">
+                                                            {v.soldier?.rank}
+                                                        </div>
+                                                    </TableCell>
+
+                                                    {/* Đơn vị */}
+                                                    <TableCell>{v.unit}</TableCell>
+
+                                                    {/* Thời gian */}
+                                                    <TableCell>
+                                                        {formatVisit(v.dateVisit, v.timeVisit)}
+                                                    </TableCell>
+
+                                                    {/* Số người */}
+                                                    <TableCell>
+                                                        {v.howManyPeople || 1}
+                                                        {v.whoPeople && (
+                                                            <div className="text-sm text-muted-foreground">
+                                                                ({v.whoPeople})
+                                                            </div>
+                                                        )}
+                                                    </TableCell>
+
+                                                    {/* Mục đích */}
+                                                    <TableCell className="max-w-[200px] truncate">
+                                                        {v.mucDichVisit || "—"}
+                                                    </TableCell>
+
+                                                    {/* Trạng thái */}
+                                                    <TableCell>
+                                                        <RenderStatus status={v.status}></RenderStatus>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+
+                                            {visits.length === 0 && (
+                                                <TableRow>
+                                                    <TableCell
+                                                        colSpan={11}
+                                                        className="text-center text-muted-foreground py-6"
+                                                    >
+                                                        Không có dữ liệu
+                                                    </TableCell>
+                                                </TableRow>
+                                            )}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )}
+
+
 
                     {/* Thông báo */}
                     <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -97,19 +242,31 @@ function StatCard({
     gradient,
     bgColor,
     iconColor,
+    onClick,
+    active,
 }) {
     return (
-        <div className="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+        <div
+            onClick={onClick}
+            className={`cursor-pointer group bg-white rounded-xl shadow-sm border 
+            ${active ? "border-blue-500 ring-2 ring-blue-200" : "border-slate-200"}
+            p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}
+        >
             <div className="flex items-start justify-between mb-4">
-                <div className={`${bgColor} ${iconColor} p-3 rounded-lg`}>{icon}</div>
+                <div className={`${bgColor} ${iconColor} p-3 rounded-lg`}>
+                    {icon}
+                </div>
             </div>
             <div>
                 <p className="text-slate-600 text-sm mb-2">{title}</p>
-                <p className={`text-4xl font-bold bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}>{value}</p>
+                <p className={`text-4xl font-bold bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}>
+                    {value}
+                </p>
             </div>
         </div>
     )
 }
+
 
 function NotificationItem({ title, type }) {
     const colors = {

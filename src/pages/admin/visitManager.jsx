@@ -21,6 +21,7 @@ import { http } from "../../lib/http"
 import { TopHeader } from "../../components/TopHeader"
 import { formatVisit } from "../../lib/utils"
 import { getRelationshipLabel } from "../../lib/getRelationshipLabel"
+import { RenderStatus } from "../../lib/renderStatus"
 
 export default function VisitManagePage() {
     const [visits, setVisits] = useState([])
@@ -45,14 +46,6 @@ export default function VisitManagePage() {
         } catch (err) {
             alert("Lỗi cập nhật trạng thái")
         }
-    }
-
-    const renderStatus = (status) => {
-        if (status === "approved")
-            return <Badge className="bg-green-600">Đã duyệt</Badge>
-        if (status === "rejected")
-            return <Badge variant="destructive">Từ chối</Badge>
-        return <Badge variant="outline">Chờ duyệt</Badge>
     }
 
     return (
@@ -156,7 +149,9 @@ export default function VisitManagePage() {
                                                 </TableCell>
 
                                                 {/* Trạng thái */}
-                                                <TableCell>{renderStatus(v.status)}</TableCell>
+                                                <TableCell>
+                                                    <RenderStatus status={v.status}></RenderStatus>
+                                                </TableCell>
 
                                                 {/* CELL FIXED */}
                                                 <TableCell

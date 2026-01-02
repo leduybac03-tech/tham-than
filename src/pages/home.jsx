@@ -1,17 +1,17 @@
 import { Header } from "../components/header"
 import { Button } from "../components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
-import { Shield, Calendar, BarChart3, CheckCircle2, Clock, FileText } from "lucide-react"
+import { Shield, Calendar, BarChart3, CheckCircle2, Clock, FileText, NewspaperIcon, ArrowRight } from "lucide-react"
 import { Link } from "react-router-dom"
 import logo from '../assets/logo.png'
 import logo2 from '../assets/logo2.png'
 import { Newspaper } from "lucide-react"
 import news1 from '../assets/new1.jpg'
+import { NewsItem } from "../components/NewItem"
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-
       <main>
         {/* Hero Section */}
         <section
@@ -138,116 +138,52 @@ export default function HomePage() {
 
         {/* News Article Section */}
         <section className="border-t border-border bg-muted/30 py-16 md:py-24">
-          <div className="container mx-auto max-w-4xl px-4">
+          <div className="mx-auto w-full px-6 lg:px-12">
             <div className="mb-12 text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-                Bản Tin – Thông Báo Đơn Vị
+              <h2 className="text-3xl md:text-4xl font-bold">
+                BẢN TIN – THÔNG BÁO ĐƠN VỊ
               </h2>
               <p className="mt-3 text-lg text-muted-foreground">
-                Thông tin chính thống, phục vụ công tác quản lý và phối hợp nội bộ
+                Thông tin chính thống, phục vụ công tác quản lý nội bộ
               </p>
             </div>
 
-            {/* Bài viết */}
-            <article className="space-y-10 text-foreground grid grid-cols-2 gap-8">
-              {/* Bài 1 */}
-              <div className="border-b border-border pb-8">
+            <article className="grid gap-10 lg:grid-cols-12 text-foreground">
+              {/* BÀI NỔI BẬT */}
+              <div className="lg:col-span-8">
                 <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
                   <Newspaper className="h-4 w-4" />
                   <span>Ngày 12/03/2025</span>
                 </div>
 
-                <h3 className="mb-4 text-2xl font-semibold leading-snug">
+                <h3 className="mb-4 text-3xl font-bold leading-tight">
                   Tăng cường quản lý công tác thăm thân trong đơn vị
                 </h3>
-                <figure className="mb-4">
-                  <img
-                    src={news1}
-                    alt="Cán bộ đơn vị triển khai hệ thống quản lý thăm thân"
-                    className="w-full rounded-md border border-border object-cover"
-                  />
-                  <figcaption className="mt-2 text-sm italic text-muted-foreground">
-                    Cán bộ đơn vị triển khai hệ thống quản lý thăm thân quân nhân bằng phần mềm.
-                  </figcaption>
-                </figure>
-                <p className="mb-3 leading-relaxed">
+
+                <img
+                  src={news1}
+                  alt="Triển khai hệ thống thăm thân"
+                  className="w-full max-h-[420px] rounded-lg object-cover mb-4"
+                />
+
+                <p className="mb-3 text-lg leading-relaxed">
                   Nhằm bảo đảm an ninh, trật tự và nâng cao hiệu quả công tác quản lý,
                   đơn vị đã triển khai hệ thống đăng ký thăm thân quân nhân theo hình
-                  thức điện tử, từng bước hiện đại hóa quy trình quản lý nội bộ.
+                  thức điện tử.
                 </p>
 
                 <p className="leading-relaxed">
-                  Việc ứng dụng công nghệ thông tin giúp giảm tải thủ tục hành chính,
-                  đồng thời tạo điều kiện thuận lợi cho thân nhân quân nhân khi đến
-                  liên hệ công tác và thăm gặp theo đúng quy định.
+                  Việc ứng dụng công nghệ giúp giảm tải thủ tục hành chính, hỗ trợ cán bộ
+                  trực ban và lực lượng bảo vệ nắm chắc tình hình.
                 </p>
               </div>
 
-              {/* Bài 2 */}
-              <div className="border-b border-border pb-8">
-                <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
-                  <Newspaper className="h-4 w-4" />
-                  <span>Ngày 05/03/2025</span>
-                </div>
-
-                <h3 className="mb-4 text-2xl font-semibold leading-snug">
-                  Ứng dụng công nghệ trong công tác quản lý thăm thân quân nhân
-                </h3>
-                <figure className="mb-4">
-                  <img
-                    src={news1}
-                    alt="Cán bộ đơn vị triển khai hệ thống quản lý thăm thân"
-                    className="w-full rounded-md border border-border object-cover"
-                  />
-                  <figcaption className="mt-2 text-sm italic text-muted-foreground">
-                    Cán bộ đơn vị triển khai hệ thống quản lý thăm thân quân nhân bằng phần mềm.
-                  </figcaption>
-                </figure>
-                <p className="mb-3 leading-relaxed">
-                  Trong thời gian qua, đơn vị đã tích cực nghiên cứu, xây dựng và đưa
-                  vào sử dụng hệ thống phần mềm quản lý thăm thân quân nhân nhằm nâng
-                  cao hiệu quả chỉ huy, điều hành.
-                </p>
-
-                <p className="leading-relaxed">
-                  Hệ thống cho phép theo dõi, thống kê chi tiết số lượt thăm theo ngày,
-                  tuần, tháng; qua đó hỗ trợ cán bộ trực ban và lực lượng bảo vệ nắm
-                  chắc tình hình, xử lý kịp thời các tình huống phát sinh.
-                </p>
-              </div>
-
-              {/* Bài 3 */}
-              <div>
-                <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
-                  <Newspaper className="h-4 w-4" />
-                  <span>Ngày 25/02/2025</span>
-                </div>
-
-                <h3 className="mb-4 text-2xl font-semibold leading-snug">
-                  Bảo đảm an toàn, kỷ luật trong công tác tổ chức thăm thân
-                </h3>
-                <figure className="mb-4">
-                  <img
-                    src={news1}
-                    alt="Cán bộ đơn vị triển khai hệ thống quản lý thăm thân"
-                    className="w-full rounded-md border border-border object-cover"
-                  />
-                  <figcaption className="mt-2 text-sm italic text-muted-foreground">
-                    Cán bộ đơn vị triển khai hệ thống quản lý thăm thân quân nhân bằng phần mềm.
-                  </figcaption>
-                </figure>
-                <p className="mb-3 leading-relaxed">
-                  Công tác tổ chức thăm thân quân nhân luôn được đơn vị xác định là
-                  nhiệm vụ quan trọng, góp phần củng cố mối quan hệ hậu phương – tiền
-                  tuyến, nâng cao đời sống tinh thần cho cán bộ, chiến sĩ.
-                </p>
-
-                <p className="leading-relaxed">
-                  Các khâu đăng ký, xác minh, tiếp nhận và quản lý thân nhân đều được
-                  thực hiện chặt chẽ, đúng quy định, bảo đảm an toàn tuyệt đối về người
-                  và vũ khí trang bị trong đơn vị.
-                </p>
-              </div>
+              {/* CỘT TIN */}
+              <aside className="lg:col-span-4 space-y-6">
+                <NewsItem date="05/03/2025" title="Ứng dụng công nghệ trong quản lý thăm thân quân nhân" />
+                <NewsItem date="25/02/2025" title="Bảo đảm an toàn, kỷ luật trong tổ chức thăm thân" />
+                <NewsItem date="18/02/2025" title="Phối hợp hậu phương – tiền tuyến trong đơn vị" />
+              </aside>
             </article>
           </div>
         </section>
@@ -409,3 +345,5 @@ export default function HomePage() {
     </div>
   )
 }
+
+

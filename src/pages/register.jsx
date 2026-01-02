@@ -330,6 +330,7 @@ export default function DangKyPage() {
                 <div>
                   <Label>Ngày thăm *</Label>
                   <Input
+                    min={new Date().toLocaleDateString("en-CA")}
                     type="date"
                     value={form.dateVisit}
                     onChange={e => handleChange("dateVisit", e.target.value)}

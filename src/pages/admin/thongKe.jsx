@@ -34,6 +34,8 @@ import StatCard from "../../components/StatCard.jsx"
 import FullScreenLoading from "../../components/Loading.jsx"
 import { formatVisit } from "../../lib/utils.js"
 import StatCardClickable from "../../components/StatCardClickable.jsx"
+import { RenderStatus } from "../../lib/renderStatus.jsx"
+import { getRelationshipLabel } from "../../lib/getRelationshipLabel.js"
 
 /* ================== TIME RANGE ================== */
 const TIME_RANGE = {
@@ -45,8 +47,7 @@ const TIME_RANGE = {
 
 export default function ThongKePage() {
   const [stats, setStats] = useState(null)
-  console.log(stats);
-  
+
   const [recentVisits, setRecentVisits] = useState([])
   const [unitStats, setUnitStats] = useState([])
 
@@ -57,6 +58,7 @@ export default function ThongKePage() {
   const [openSoldier, setOpenSoldier] = useState(null)
   const [soldierStats, setSoldierStats] = useState(null)
   const [soldierVisits, setSoldierVisits] = useState([])
+    
   const [loadingSoldier, setLoadingSoldier] = useState(false)
 
   /* ================== INIT ================== */
@@ -247,18 +249,18 @@ export default function ThongKePage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {unitStats.map((u, i) => {
-                  const max = Math.max(...unitStats.map(x => x.total))
-                  const percent = (u.total / max) * 100
+                  const max = Math.max(...unitStats.map(x => x.count))
+                  const percent = (u.count / max) * 100
 
                   return (
                     <div key={i}>
                       <div className="flex justify-between text-sm">
                         <span>{u.unit}</span>
-                        <span className="font-semibold">{u.total}</span>
+                        <span className="font-semibold">{u.count}</span>
                       </div>
                       <div className="h-2 bg-muted rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-yellow-600"
+                          className="h-full bg-green-600"
                           style={{ width: `${percent}%` }}
                         />
                       </div>
@@ -301,24 +303,86 @@ export default function ThongKePage() {
                   </div>
                 )}
 
-                <Table>
+                <Table className="min-w-[1200px]">
                   <TableHeader>
                     <TableRow>
                       <TableHead>Người thăm</TableHead>
+                      <TableHead>CCCD</TableHead>
+                      <TableHead>Quan hệ</TableHead>
+                      <TableHead>Địa chỉ</TableHead>
                       <TableHead>Thời gian</TableHead>
+                      <TableHead>Số người</TableHead>
+                      <TableHead>Mục đích</TableHead>
                       <TableHead>Trạng thái</TableHead>
                     </TableRow>
                   </TableHeader>
+
                   <TableBody>
                     {soldierVisits.map((v) => (
                       <TableRow key={v._id}>
-                        <TableCell>{v.fullName}</TableCell>
-                        <TableCell>{formatVisit(v.dateVisit, v.timeVisit)}</TableCell>
-                        <TableCell>{getStatusBadge(v.status)}</TableCell>
+                        {/* Người thăm */}
+                        <TableCell>
+                          <div className="font-medium">{v.fullName}</div>
+                          <div className="text-sm text-muted-foreground">
+                            📞 {v.phoneNumber}
+                          </div>
+                        </TableCell>
+
+                        {/* CCCD */}
+                        <TableCell>{v.cccd}</TableCell>
+
+                        {/* Quan hệ */}
+                        <TableCell>
+                          {getRelationshipLabel(v.relationship)}
+                        </TableCell>
+
+                        {/* Địa chỉ */}
+                        <TableCell className="max-w-[200px] truncate">
+                          {v.address}
+                        </TableCell>
+
+                        {/* Thời gian */}
+                        <TableCell>
+                          {formatVisit(v.dateVisit, v.timeVisit)}
+                        </TableCell>
+
+                        {/* Số người */}
+                        <TableCell>
+                          {v.howManyPeople || 1}
+                          {v.whoPeople && (
+                            <div className="text-sm text-muted-foreground">
+                              ({v.whoPeople})
+                            </div>
+                          )}
+                        </TableCell>
+
+                        {/* Mục đích */}
+                        <TableCell className="max-w-[200px] truncate">
+                          {v.mucDichVisit || "—"}
+                        </TableCell>
+
+                        {/* Trạng thái */}
+                        <TableCell>
+                          {getStatusBadge
+                            ? getStatusBadge(v.status)
+                            : <RenderStatus status={v.status}></RenderStatus>}
+                        </TableCell>
                       </TableRow>
                     ))}
+
+                    {soldierVisits.length === 0 && (
+                      <TableRow>
+                        <TableCell
+                          colSpan={8}
+                          className="text-center text-muted-foreground py-6"
+                        >
+                          Không có dữ liệu thăm thân
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
+
               </>
             )}
           </div>
