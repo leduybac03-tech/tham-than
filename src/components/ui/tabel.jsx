@@ -8,7 +8,7 @@ const Table = React.forwardRef(({ className, ...props }, ref) => (
     <table
       ref={ref}
       className={cn(
-        "w-full min-w-max caption-bottom text-sm border-collapse",
+        "w-full table-auto text-sm border-collapse", // dùng table-auto để tự co
         className
       )}
       {...props}
@@ -76,7 +76,7 @@ const TableHead = React.forwardRef(({ className, ...props }, ref) => (
   <th
     ref={ref}
     className={cn(
-      "h-12 px-4 text-left align-middle font-medium text-muted-foreground",
+      "h-10 px-2 md:px-3 text-left align-middle font-medium text-muted-foreground truncate",
       className
     )}
     {...props}
@@ -89,7 +89,10 @@ TableHead.displayName = "TableHead"
 const TableCell = React.forwardRef(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn("p-4 align-middle", className)}
+    className={cn(
+      "px-2 md:px-3 py-1 align-middle truncate max-w-[250px]", // giảm padding, truncate text dài
+      className
+    )}
     {...props}
   />
 ))
@@ -100,7 +103,7 @@ TableCell.displayName = "TableCell"
 const TableCaption = React.forwardRef(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn("mt-4 text-sm text-muted-foreground", className)}
+    className={cn("mt-2 text-sm text-muted-foreground", className)}
     {...props}
   />
 ))

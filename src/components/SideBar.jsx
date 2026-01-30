@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom"
-import { Shield, Home, Calendar, BarChart3, ChevronLeft, ChevronRight, PenIcon } from "lucide-react"
+import { Shield, Home, Calendar, BarChart3, ChevronLeft, ChevronRight, PenIcon, MessageCircle } from "lucide-react"
 import { Button } from "./ui/button"
 import { cn } from "../lib/utils"
 import logo from '../assets/logo.png'; // with import
@@ -13,6 +13,7 @@ export function Sidebar() {
     { href: "/admin/visits", label: "Quản lý thăm thân", icon: Calendar },
     { href: "/admin/posts", label: "Quản lý bài viết", icon: PenIcon },
     { href: "/admin/thong-ke", label: "Thống Kê", icon: BarChart3 },
+    { href: "/admin/feedbacks", label: "Quản lý cảm nghĩ", icon: MessageCircle },
   ]
 
   return (

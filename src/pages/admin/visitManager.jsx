@@ -22,6 +22,7 @@ import { TopHeader } from "../../components/TopHeader"
 import { formatVisit } from "../../lib/utils"
 import { getRelationshipLabel } from "../../lib/getRelationshipLabel"
 import { RenderStatus } from "../../lib/renderStatus"
+import FullScreenLoading from "../../components/Loading"
 
 export default function VisitManagePage() {
     const [visits, setVisits] = useState([])
@@ -47,6 +48,7 @@ export default function VisitManagePage() {
             alert("Lỗi cập nhật trạng thái")
         }
     }
+    if (!visits.length > 0) return <FullScreenLoading />
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
@@ -118,7 +120,7 @@ export default function VisitManagePage() {
                                                 {/* Quân nhân */}
                                                 <TableCell>
                                                     <div className="font-medium">
-                                                        {v.soldier?.fullName || "—"}
+                                                        {v.soldier?.name || "—"}
                                                     </div>
                                                     <div className="text-sm text-muted-foreground">
                                                         {v.soldier?.rank}

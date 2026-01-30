@@ -1,14 +1,36 @@
 import { Header } from "../components/header"
 import { Button } from "../components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
-import { Shield, Calendar, BarChart3, CheckCircle2, Clock, FileText, NewspaperIcon, ArrowRight } from "lucide-react"
-import { Link } from "react-router-dom"
-import logo from '../assets/logo.png'
-import logo2 from '../assets/logo2.png'
-import { Newspaper } from "lucide-react"
-import news1 from '../assets/new1.jpg'
-import { NewsItem } from "../components/NewItem"
+import {
+  Shield,
+  Calendar,
+  BarChart3,
+  CheckCircle2,
+  Clock,
+  FileText,
+  Newspaper,
+  MessageCircleHeart,
+  CalendarDays,
+  Facebook,
+  Link2,
+} from "lucide-react"
+import { Link, useLocation } from "react-router-dom"
+import NewsSection from "../components/newsSection"
+import { FeedbackSection } from "../components/FeedbackSection"
+import { useEffect } from "react"
+
 export default function HomePage() {
+
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.hash === "#feedbacks") {
+      setTimeout(() => {
+        document.getElementById("feedbacks")?.scrollIntoView({ behavior: "smooth" })
+      }, 200)
+    }
+  }, [location])
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -16,91 +38,42 @@ export default function HomePage() {
         {/* Hero Section */}
         <section
           style={{ backgroundImage: "url('../bg-2.jpg')" }}
-          className="
-    relative
-    bg-cover bg-center
-    border-b border-border min-h-screen
-  "
+          className="relative bg-cover bg-center border-b border-border min-h-screen"
         >
-          {/* Overlay */}
           <div className="absolute inset-0 bg-gradient-to-br from-red-900/90 via-red-800/85 to-yellow-900/70" />
 
           <div className="relative container mx-auto px-4 py-10 md:py-16 text-center">
             <div className="mx-auto max-w-5xl flex flex-col items-center gap-10">
-
-              {/* Logos */}
-
-
-              {/* Hero Card */}
-              <div
-                className="
-          w-full max-w-4xl
-          rounded-3xl
-          bg-white/10 backdrop-blur-md
-          border border-yellow-500/40
-          p-8 md:p-12
-          shadow-2xl
-          animate-fade-in-up
-        "
-              >
-                <h1
-                  className="
-            text-balance
-            text-4xl md:text-5xl lg:text-6xl
-            font-extrabold
-            tracking-tight
-            text-yellow-300
-            drop-shadow
-          "
-                >
+              <div className="w-full max-w-4xl rounded-3xl bg-white/10 backdrop-blur-md border border-yellow-500/40 p-8 md:p-12 shadow-2xl animate-fade-in-up">
+                <h1 className="text-balance text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-yellow-300 drop-shadow">
                   Hệ Thống Đăng Ký Thăm Thân Quân Nhân
                 </h1>
 
-                <p
-                  className="
-            mt-6
-            max-w-3xl mx-auto
-            text-lg md:text-xl
-            leading-relaxed
-            text-yellow-100
-          "
-                >
+                <p className="mt-6 max-w-3xl mx-auto text-lg md:text-xl leading-relaxed text-yellow-100">
                   Nền tảng quản lý lịch thăm thân <b>an toàn – chính quy – hiện đại</b>,
                   giúp thân nhân đăng ký thuận tiện, hỗ trợ đơn vị quản lý chặt chẽ,
                   đúng quy định và kỷ luật quân đội.
                 </p>
 
-                {/* CTA */}
                 <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
                   <Link to="/dang-ky">
                     <Button
                       size="lg"
-                      className="
-                text-base font-bold
-                bg-gradient-to-r from-yellow-400 to-yellow-500
-                text-red-900
-                hover:from-yellow-500 hover:to-yellow-600
-                shadow-lg hover:scale-105 transition
-              "
+                      className="text-base font-bold bg-gradient-to-r from-yellow-400 to-yellow-500 text-red-900 hover:from-yellow-500 hover:to-yellow-600 shadow-lg hover:scale-105 transition"
                     >
                       <Calendar className="mr-2 h-5 w-5" />
                       Đăng Ký Thăm Thân
                     </Button>
                   </Link>
 
-                  <Link to="/admin/login">
+                  <Link to="/feedbacks">
                     <Button
                       size="lg"
                       variant="outline"
-                      className="
-                text-base font-bold
-                border-yellow-400 text-yellow-200
-                hover:bg-yellow-400 hover:text-red-900
-                shadow-lg hover:scale-105 transition
-              "
+                      className="text-base font-bold border-yellow-400 text-yellow-200 hover:bg-yellow-400 hover:text-red-900 shadow-lg hover:scale-105 transition"
                     >
-                      <BarChart3 className="mr-2 h-5 w-5" />
-                      Đăng nhập ADMIN
+                      <MessageCircleHeart className="mr-2 h-5 w-5" />
+                      Gửi cảm nghĩ
                     </Button>
                   </Link>
                 </div>
@@ -108,92 +81,30 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Animations */}
           <style>
             {`
-      @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      @keyframes fadeInLeft {
-        from { opacity: 0; transform: translateX(-40px); }
-        to { opacity: 1; transform: translateX(0); }
-      }
-      @keyframes fadeInRight {
-        from { opacity: 0; transform: translateX(40px); }
-        to { opacity: 1; transform: translateX(0); }
-      }
-      .animate-fade-in-up {
-        animation: fadeInUp 1s ease-out;
-      }
-      .animate-fade-in-left {
-        animation: fadeInLeft 1s ease-out;
-      }
-      .animate-fade-in-right {
-        animation: fadeInRight 1s ease-out;
-      }
-    `}
+              @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(30px); }
+                to { opacity: 1; transform: translateY(0); }
+              }
+              .animate-fade-in-up {
+                animation: fadeInUp 1s ease-out;
+              }
+            `}
           </style>
         </section>
-
-        {/* News Article Section */}
-        <section className="border-t border-border bg-muted/30 py-16 md:py-24">
-          <div className="mx-auto w-full px-6 lg:px-12">
-            <div className="mb-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold">
-                BẢN TIN – THÔNG BÁO ĐƠN VỊ
-              </h2>
-              <p className="mt-3 text-lg text-muted-foreground">
-                Thông tin chính thống, phục vụ công tác quản lý nội bộ
-              </p>
-            </div>
-
-            <article className="grid gap-10 lg:grid-cols-12 text-foreground">
-              {/* BÀI NỔI BẬT */}
-              <div className="lg:col-span-8">
-                <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
-                  <Newspaper className="h-4 w-4" />
-                  <span>Ngày 12/03/2025</span>
-                </div>
-
-                <h3 className="mb-4 text-3xl font-bold leading-tight">
-                  Tăng cường quản lý công tác thăm thân trong đơn vị
-                </h3>
-
-                <img
-                  src={news1}
-                  alt="Triển khai hệ thống thăm thân"
-                  className="w-full max-h-[420px] rounded-lg object-cover mb-4"
-                />
-
-                <p className="mb-3 text-lg leading-relaxed">
-                  Nhằm bảo đảm an ninh, trật tự và nâng cao hiệu quả công tác quản lý,
-                  đơn vị đã triển khai hệ thống đăng ký thăm thân quân nhân theo hình
-                  thức điện tử.
-                </p>
-
-                <p className="leading-relaxed">
-                  Việc ứng dụng công nghệ giúp giảm tải thủ tục hành chính, hỗ trợ cán bộ
-                  trực ban và lực lượng bảo vệ nắm chắc tình hình.
-                </p>
-              </div>
-
-              {/* CỘT TIN */}
-              <aside className="lg:col-span-4 space-y-6">
-                <NewsItem date="05/03/2025" title="Ứng dụng công nghệ trong quản lý thăm thân quân nhân" />
-                <NewsItem date="25/02/2025" title="Bảo đảm an toàn, kỷ luật trong tổ chức thăm thân" />
-                <NewsItem date="18/02/2025" title="Phối hợp hậu phương – tiền tuyến trong đơn vị" />
-              </aside>
-            </article>
-          </div>
-        </section>
-
+        {/* ================== NEWS SECTION (ĐÃ NÂNG CẤP) ================== */}
+        <NewsSection></NewsSection>
+        
+        {/* ================== END NEWS SECTION ================== */}
 
         {/* Features Section */}
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4">
             <div className="mb-12 text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">Tính Năng Chính</h2>
+              <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+                Tính Năng Chính
+              </h2>
               <p className="mt-3 text-lg text-muted-foreground">
                 Hệ thống được thiết kế để đảm bảo an ninh và hiệu quả
               </p>
@@ -275,51 +186,13 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Process Section */}
-        <section className="border-t border-border bg-muted/30 py-16 md:py-24">
-          <div className="container mx-auto px-4">
-            <div className="mb-12 text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">Quy Trình Đăng Ký</h2>
-              <p className="mt-3 text-lg text-muted-foreground">Ba bước đơn giản để hoàn tất đăng ký thăm thân</p>
-            </div>
-
-            <div className="grid gap-8 md:grid-cols-3">
-              <div className="relative flex flex-col items-center text-center">
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-yellow-600 text-2xl font-bold text-primary-foreground">
-                  1
-                </div>
-                <h3 className="mb-2 text-xl font-semibold text-foreground">Điền Thông Tin</h3>
-                <p className="leading-relaxed text-muted-foreground">
-                  Cung cấp thông tin cá nhân và thông tin quân nhân cần thăm
-                </p>
-              </div>
-
-              <div className="relative flex flex-col items-center text-center">
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-900 text-2xl font-bold text-secondary-foreground">
-                  2
-                </div>
-                <h3 className="mb-2 text-xl font-semibold text-foreground">Chọn Thời Gian</h3>
-                <p className="leading-relaxed text-muted-foreground">
-                  Chọn ngày giờ phù hợp trong khung giờ thăm thân được phép
-                </p>
-              </div>
-
-              <div className="relative flex flex-col items-center text-center">
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent text-2xl font-bold text-accent-foreground">
-                  3
-                </div>
-                <h3 className="mb-2 text-xl font-semibold text-foreground">Xác Nhận</h3>
-                <p className="leading-relaxed text-muted-foreground">Nhận mã xác nhận và xuất trình khi đến đơn vị</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* CTA Section */}
         <section className="border-t border-border py-16 md:py-24">
           <div className="container mx-auto px-4 text-center">
             <div className="mx-auto max-w-2xl">
-              <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">Sẵn Sàng Đăng Ký?</h2>
+              <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+                Sẵn Sàng Đăng Ký?
+              </h2>
               <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
                 Bắt đầu quy trình đăng ký thăm thân chỉ với vài thao tác đơn giản
               </p>
@@ -336,7 +209,6 @@ export default function HomePage() {
         </section>
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-border bg-red-100 py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <p>© 2025 Hệ Thống Thăm Thân Quân Nhân. Dành cho mục đích quản lý nội bộ.</p>
@@ -345,5 +217,3 @@ export default function HomePage() {
     </div>
   )
 }
-
-

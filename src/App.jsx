@@ -13,6 +13,8 @@ import AdminThongKe from "./pages/admin/thongKe"
 import PrivateRoute from "./routes/PrivateRoute"
 import VisitManagePage from "./pages/admin/visitManager"
 import PostManager from "./pages/admin/postManager"
+import FeedbackPage from "./pages/FeedbackPage"
+import FeedbackManager from "./pages/admin/FeedbackManager"
 
 export default function App() {
   return (
@@ -22,6 +24,7 @@ export default function App() {
         {/* ===== PUBLIC ===== */}
         <Route path="/" element={<HomePage />} />
         <Route path="/dang-ky" element={<DangKyPage />} />
+        <Route path="/feedbacks" element={<FeedbackPage />} />
 
         {/* ===== ADMIN LOGIN (PUBLIC) ===== */}
         <Route path="/admin/login" element={<LoginPage />} />
@@ -32,6 +35,7 @@ export default function App() {
           <Route path="/admin/thong-ke" element={<AdminThongKe />} />
           <Route path="/admin/visits" element={<VisitManagePage />} />
           <Route path="/admin/posts" element={<PostManager />} />
+          <Route path="/admin/feedbacks" element={<FeedbackManager />} />
 
         </Route>
 

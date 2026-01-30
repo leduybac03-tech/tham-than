@@ -1,31 +1,35 @@
 import { useEffect, useState } from "react"
 import {
-    FileText,
     PlusCircle,
     Edit,
     Trash2,
     Calendar,
+    Image as ImageIcon,
 } from "lucide-react"
+
 import Editor from "../../components/Editor"
 import { Button } from "../../components/ui/button"
 import {
     Card,
     CardHeader,
     CardTitle,
-    CardDescription,
     CardContent,
 } from "../../components/ui/card"
 import { Input } from "../../components/ui/input"
 import { Label } from "../../components/ui/label"
 import { Alert, AlertDescription } from "../../components/ui/alert"
+
 import { http } from "../../lib/http"
-import { TopHeader } from "../../components/TopHeader.jsx"
-import { Sidebar } from "../../components/SideBar.jsx"
+import { TopHeader } from "../../components/TopHeader"
+import { Sidebar } from "../../components/SideBar"
 
 export default function PostManager() {
     const [posts, setPosts] = useState([])
     const [editing, setEditing] = useState(false)
     const [currentId, setCurrentId] = useState(null)
+
+    const [imageFile, setImageFile] = useState(null)
+    const [imagePreview, setImagePreview] = useState("")
 
     const [form, setForm] = useState({
         title: "",
@@ -34,6 +38,7 @@ export default function PostManager() {
         img: "",
     })
 
+    /* ================= FETCH ================= */
     useEffect(() => {
         loadPosts()
     }, [])
@@ -43,8 +48,16 @@ export default function PostManager() {
         setPosts(res.data)
     }
 
+    /* ================= FORM ================= */
     const resetForm = () => {
-        setForm({ title: "", description: "", content: "", img: "" })
+        setForm({
+            title: "",
+            description: "",
+            content: "",
+            img: "",
+        })
+        setImageFile(null)
+        setImagePreview("")
         setEditing(false)
         setCurrentId(null)
     }
@@ -55,10 +68,31 @@ export default function PostManager() {
             return
         }
 
+        let imageUrl = form.img
+
+        // upload ảnh nếu có
+        if (imageFile) {
+            const fd = new FormData()
+            fd.append("image", imageFile)
+
+            const uploadRes = await http.post(
+                "/posts/upload-image",
+                fd,
+                { headers: { "Content-Type": "multipart/form-data" } }
+            )
+
+            imageUrl = uploadRes.data.url
+        }
+
+        const payload = {
+            ...form,
+            img: imageUrl,
+        }
+
         if (editing) {
-            await http.put(`/posts/${currentId}`, form)
+            await http.put(`/posts/${currentId}`, payload)
         } else {
-            await http.post("/posts", form)
+            await http.post("/posts", payload)
         }
 
         resetForm()
@@ -72,6 +106,7 @@ export default function PostManager() {
             content: p.content,
             img: p.img || "",
         })
+        setImagePreview(p.img || "")
         setEditing(true)
         setCurrentId(p._id)
     }
@@ -82,14 +117,15 @@ export default function PostManager() {
         loadPosts()
     }
 
+    /* ================= UI ================= */
     return (
-        <div className="relative min-h-screen">
-            <TopHeader></TopHeader>
-            <Sidebar></Sidebar>
+        <div className="relative min-h-screen bg-slate-50">
+            <TopHeader />
+            <Sidebar />
 
-            <div className="relative container mx-auto w-auto py-10 space-y-8 ml-[220px] py-20">
-                {/* LIST */}
-                <Card className="bg-white/95">
+            <div className="ml-[220px] px-6 py-10 space-y-10">
+                {/* ===== LIST ===== */}
+                <Card>
                     <CardHeader>
                         <CardTitle>Danh sách bài viết</CardTitle>
                     </CardHeader>
@@ -97,33 +133,37 @@ export default function PostManager() {
                     <CardContent className="space-y-3">
                         {posts.length === 0 && (
                             <Alert>
-                                <AlertDescription>
-                                    Chưa có bài viết
-                                </AlertDescription>
+                                <AlertDescription>Chưa có bài viết</AlertDescription>
                             </Alert>
                         )}
 
                         {posts.map((p) => (
                             <div
                                 key={p._id}
-                                className="flex items-center justify-between rounded-lg border p-3 hover:bg-muted"
+                                className="flex items-center justify-between rounded-lg border p-4 hover:bg-muted transition"
                             >
                                 <div>
-                                    <h4 className="font-semibold">{p.title}</h4>
-                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <h4 className="font-semibold text-lg">{p.title}</h4>
+                                    <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                                         <Calendar className="h-4 w-4" />
                                         {new Date(p.createdAt).toLocaleDateString("vi-VN")}
                                     </div>
                                 </div>
 
                                 <div className="flex gap-2">
-                                    <Button size="icon" variant="outline"
-                                        onClick={() => handleEdit(p)}>
+                                    <Button
+                                        size="icon"
+                                        variant="outline"
+                                        onClick={() => handleEdit(p)}
+                                    >
                                         <Edit className="h-4 w-4" />
                                     </Button>
 
-                                    <Button size="icon" variant="destructive"
-                                        onClick={() => handleDelete(p._id)}>
+                                    <Button
+                                        size="icon"
+                                        variant="destructive"
+                                        onClick={() => handleDelete(p._id)}
+                                    >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
                                 </div>
@@ -131,8 +171,9 @@ export default function PostManager() {
                         ))}
                     </CardContent>
                 </Card>
-                {/* FORM */}
-                <Card className="bg-white/95">
+
+                {/* ===== FORM ===== */}
+                <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <PlusCircle className="h-5 w-5 text-red-700" />
@@ -140,7 +181,7 @@ export default function PostManager() {
                         </CardTitle>
                     </CardHeader>
 
-                    <CardContent className="space-y-4">
+                    <CardContent className="space-y-5">
                         <div>
                             <Label>Tiêu đề *</Label>
                             <Input
@@ -172,13 +213,29 @@ export default function PostManager() {
                         </div>
 
                         <div>
-                            <Label>Ảnh đại diện (URL)</Label>
+                            <Label className="flex items-center gap-2">
+                                <ImageIcon className="h-4 w-4" />
+                                Ảnh đại diện
+                            </Label>
+
                             <Input
-                                value={form.img}
-                                onChange={(e) =>
-                                    setForm({ ...form, img: e.target.value })
-                                }
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files[0]
+                                    if (!file) return
+                                    setImageFile(file)
+                                    setImagePreview(URL.createObjectURL(file))
+                                }}
                             />
+
+                            {imagePreview && (
+                                <img
+                                    src={imagePreview}
+                                    alt="preview"
+                                    className="mt-3 h-44 rounded-md object-cover border"
+                                />
+                            )}
                         </div>
 
                         <div className="flex gap-3">
@@ -197,8 +254,6 @@ export default function PostManager() {
                         </div>
                     </CardContent>
                 </Card>
-
-
             </div>
         </div>
     )

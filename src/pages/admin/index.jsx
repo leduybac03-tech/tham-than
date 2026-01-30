@@ -156,7 +156,7 @@ export default function AdminDashboard() {
                                                     {/* Quân nhân */}
                                                     <TableCell>
                                                         <div className="font-medium">
-                                                            {v.soldier?.fullName || "—"}
+                                                            {v.soldier?.name || "—"}
                                                         </div>
                                                         <div className="text-sm text-muted-foreground">
                                                             {v.soldier?.rank}

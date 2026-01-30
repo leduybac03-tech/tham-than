@@ -10,7 +10,7 @@ export function Header() {
   const { pathname } = useLocation()
 
   const navItems = [
-    { href: "/", label: "Trang Chủ" },
+    { href: "/admin/login", label: "ADMIN" },
     { href: "/dang-ky", label: "Đăng Ký Thăm Thân" },
   ]
 
