@@ -13,6 +13,7 @@ import {
   CalendarDays,
   Facebook,
   Link2,
+  ChartBar,
 } from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
 import NewsSection from "../components/newsSection"
@@ -66,6 +67,7 @@ export default function HomePage() {
                     </Button>
                   </Link>
 
+
                   <Link to="/feedbacks">
                     <Button
                       size="lg"
@@ -77,6 +79,16 @@ export default function HomePage() {
                     </Button>
                   </Link>
                 </div>
+                <Link to="/theo-doi">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="mt-4 text-base font-bold border-sky-400 text-sky-200 hover:bg-sky-400 hover:text-green-900 shadow-lg hover:scale-105 transition"
+                  >
+                    <ChartBar className="mr-2 h-5 w-5" />
+                    Theo dõi thăm thân
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -95,96 +107,7 @@ export default function HomePage() {
         </section>
         {/* ================== NEWS SECTION (ĐÃ NÂNG CẤP) ================== */}
         <NewsSection></NewsSection>
-        
         {/* ================== END NEWS SECTION ================== */}
-
-        {/* Features Section */}
-        <section className="py-16 md:py-24">
-          <div className="container mx-auto px-4">
-            <div className="mb-12 text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-                Tính Năng Chính
-              </h2>
-              <p className="mt-3 text-lg text-muted-foreground">
-                Hệ thống được thiết kế để đảm bảo an ninh và hiệu quả
-              </p>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <Card className="border-border">
-                <CardHeader>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent">
-                    <Calendar className="h-6 w-6 text-accent-foreground" />
-                  </div>
-                  <CardTitle className="text-xl">Đăng Ký Dễ Dàng</CardTitle>
-                  <CardDescription className="leading-relaxed">
-                    Giao diện đơn giản, dễ sử dụng cho người thân đăng ký lịch thăm nhanh chóng
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              <Card className="border-border">
-                <CardHeader>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-900">
-                    <CheckCircle2 className="h-6 w-6 text-secondary-foreground" />
-                  </div>
-                  <CardTitle className="text-xl">Xác Minh An Toàn</CardTitle>
-                  <CardDescription className="leading-relaxed">
-                    Quy trình xác thực thông tin nghiêm ngặt đảm bảo an ninh quân đội
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              <Card className="border-border">
-                <CardHeader>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-yellow-600">
-                    <Clock className="h-6 w-6 text-primary-foreground" />
-                  </div>
-                  <CardTitle className="text-xl">Theo Dõi Thời Gian</CardTitle>
-                  <CardDescription className="leading-relaxed">
-                    Quản lý lịch thăm theo giờ, ngày với thông báo tự động cho bảo vệ
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              <Card className="border-border">
-                <CardHeader>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent">
-                    <BarChart3 className="h-6 w-6 text-accent-foreground" />
-                  </div>
-                  <CardTitle className="text-xl">Thống Kê Chi Tiết</CardTitle>
-                  <CardDescription className="leading-relaxed">
-                    Báo cáo số liệu thăm thân theo ngày, tuần, tháng cho quản trị viên
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              <Card className="border-border">
-                <CardHeader>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-900">
-                    <FileText className="h-6 w-6 text-secondary-foreground" />
-                  </div>
-                  <CardTitle className="text-xl">Lưu Trữ Hồ Sơ</CardTitle>
-                  <CardDescription className="leading-relaxed">
-                    Hệ thống lưu trữ thông tin đăng ký an toàn, tra cứu nhanh chóng
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              <Card className="border-border">
-                <CardHeader>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-yellow-600">
-                    <Shield className="h-6 w-6 text-primary-foreground" />
-                  </div>
-                  <CardTitle className="text-xl">Bảo Mật Cao</CardTitle>
-                  <CardDescription className="leading-relaxed">
-                    Mã hóa dữ liệu, phân quyền truy cập theo tiêu chuẩn quân đội
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </div>
-          </div>
-        </section>
 
         {/* CTA Section */}
         <section className="border-t border-border py-16 md:py-24">

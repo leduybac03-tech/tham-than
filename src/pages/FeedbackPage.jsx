@@ -131,11 +131,10 @@ export default function FeedbackPage() {
                     className="transition"
                   >
                     <Star
-                      className={`w-6 h-6 ${
-                        star <= form.rating
-                          ? "fill-yellow-400 text-yellow-400"
-                          : "text-gray-300"
-                      }`}
+                      className={`w-6 h-6 ${star <= form.rating
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-gray-300"
+                        }`}
                     />
                   </button>
                 ))}
@@ -195,14 +194,25 @@ export default function FeedbackPage() {
                 Gửi cảm nghĩ
               </Button>
 
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full border-red-700 text-red-700"
-                onClick={() => navigate("/dang-ky")}
-              >
-                Đăng ký thăm thân
-              </Button>
+              <div className="flex gap-2">
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full border-red-700 text-red-700"
+                  onClick={() => navigate("/")}
+                >
+                  Trang chủ
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full border-red-700 text-red-700"
+                  onClick={() => navigate("/dang-ky")}
+                >
+                  Đăng ký thăm thân
+                </Button>
+              </div>
             </div>
           </form>
 

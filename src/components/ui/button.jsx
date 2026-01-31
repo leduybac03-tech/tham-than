@@ -26,6 +26,8 @@ const buttonVariants = cva(
 
         link:
           "text-yellow-400 underline-offset-4 hover:underline",
+        sky:
+          "text-sky-400 hover:bg-sky-400/20",
       },
       size: {
         default: "h-10 px-4 py-2",

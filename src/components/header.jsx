@@ -25,16 +25,15 @@ export function Header() {
       <div className="container mx-auto flex h-20 items-center justify-between px-4">
 
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 group">
+        <Link to="/" className="flex items-center md:gap-3 group flex-col md:flex-row">
           <img
             src={logo}
             alt="Logo"
-            width={72}
-            className="p-2 transition-transform duration-300 group-hover:scale-105"
+            className="md:w-[72px] w-[40px] p-2 transition-transform duration-300 group-hover:scale-105"
           />
-          <span className="hidden leading-3 sm:inline-block text-lg font-extrabold tracking-wide text-yellow-100 drop-shadow">
+          <span className="text-[10px] leading-3 sm:inline-block text-lg md:font-extrabold tracking-wide text-yellow-100 drop-shadow">
             Quân khu 4 <br />
-            <span className="text-2xl text-yellow-400">Lữ đoàn 283</span>
+            <span className="md:text-2xl text-yellow-400">Lữ đoàn 283</span>
           </span>
         </Link>
 
@@ -42,7 +41,7 @@ export function Header() {
         <Marquee
           text="Hệ thống thăm thân, giúp kết nối gia đình và quân nhân!"
           speed={10}
-          className="w-1/6 text-3xl font-extrabold text-yellow-400"
+          className="md:w-1/6 md:text-3xl text-xl font-extrabold text-yellow-400"
         />
 
         {/* Desktop Nav */}

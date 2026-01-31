@@ -2,6 +2,8 @@ import { CalendarDays, Newspaper } from "lucide-react"
 import { useState } from "react"
 import { NewsItem } from "./NewItem.jsx"
 import { FeedbackSection } from "./FeedbackSection.jsx"
+import { Button } from "./ui/button.jsx"
+import { Link } from "react-router-dom"
 
 export default function NewsSection() {
 
@@ -72,7 +74,7 @@ export default function NewsSection() {
             author: "Ban Tham mưu",
             source: "Đơn vị",
         },
-         {
+        {
             id: 3,
             category: "Hoạt động đơn vị",
             date: "25/02/2025",
@@ -135,6 +137,17 @@ export default function NewsSection() {
     ]
 
     const [selectedNews, setSelectedNews] = useState(NEWS_LIST[0])
+    const [loading, setLoading] = useState(false)
+
+    const handleSelectNews = (news) => {
+        setLoading(true)
+
+        setTimeout(() => {
+            setSelectedNews(news)
+            setLoading(false)
+        }, 500) // delay 0.5s cho hiệu ứng
+    }
+
 
     return (
         <section className="border-t border-border bg-muted/30 py-16 md:py-24">
@@ -150,87 +163,114 @@ export default function NewsSection() {
                     </p>
                 </div>
 
-                <div className="flex gap-10">
+                <div className="md:flex gap-10">
 
                     {/* ===== MAIN ARTICLE ===== */}
                     <article className="bg-white rounded-2xl shadow-sm border p-6 md:p-8 space-y-6 flex-1 h-[1000px] overflow-y-scroll">
 
-                        {/* Meta */}
-                        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                            <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-blue-600 font-medium">
-                                <Newspaper className="h-4 w-4" />
-                                {selectedNews.category}
-                            </span>
-                            <span className="flex items-center gap-1">
-                                <CalendarDays className="h-4 w-4" />
-                                {selectedNews.date}
-                            </span>
-                        </div>
+                        {loading ? (
+                            // ===== LOADER SKELETON =====
+                            <div className="animate-pulse space-y-6">
 
-                        {/* Title */}
-                        <h1 className="text-3xl md:text-4xl font-extrabold leading-tight tracking-tight">
-                            {selectedNews.title}
-                        </h1>
+                                <div className="flex gap-3">
+                                    <div className="h-6 w-32 bg-gray-200 rounded-full"></div>
+                                    <div className="h-6 w-24 bg-gray-200 rounded-full"></div>
+                                </div>
 
-                        {/* Image */}
-                        <figure className="space-y-2">
-                            <img
-                                src={selectedNews.image}
-                                alt={selectedNews.title}
-                                className="w-full max-h-[420px] rounded-xl object-cover shadow-md"
-                            />
-                            <figcaption className="text-sm text-muted-foreground italic">
-                                {selectedNews.caption}
-                            </figcaption>
-                        </figure>
+                                <div className="h-10 w-3/4 bg-gray-200 rounded"></div>
 
-                        {/* Lead */}
-                        <p className="text-lg md:text-xl font-medium leading-relaxed text-gray-800 border-l-4 border-blue-500 pl-4">
-                            {selectedNews.lead}
-                        </p>
+                                <div className="h-[300px] w-full bg-gray-200 rounded-xl"></div>
 
-                        {/* Content with images */}
-                        <div className="space-y-6">
-                            {selectedNews.content.map((item, index) => {
-                                if (item.type === "text") {
-                                    return (
-                                        <p key={index} className="text-lg leading-relaxed">
-                                            {item.value}
-                                        </p>
-                                    )
-                                }
+                                <div className="space-y-3">
+                                    <div className="h-5 w-full bg-gray-200 rounded"></div>
+                                    <div className="h-5 w-5/6 bg-gray-200 rounded"></div>
+                                    <div className="h-5 w-2/3 bg-gray-200 rounded"></div>
+                                </div>
 
-                                if (item.type === "image") {
-                                    return (
-                                        <figure key={index} className="space-y-2">
-                                            <img
-                                                src={item.src}
-                                                alt=""
-                                                className="w-full rounded-xl shadow-md"
-                                            />
-                                            {item.caption && (
-                                                <figcaption className="text-sm text-muted-foreground italic">
-                                                    {item.caption}
-                                                </figcaption>
-                                            )}
-                                        </figure>
-                                    )
-                                }
+                            </div>
+                        ) : (
+                            // ===== REAL CONTENT =====
+                            <>
+                                {/* Meta */}
+                                <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                                    <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-blue-600 font-medium">
+                                        <Newspaper className="h-4 w-4" />
+                                        {selectedNews.category}
+                                    </span>
+                                    <span className="flex items-center gap-1">
+                                        <CalendarDays className="h-4 w-4" />
+                                        {selectedNews.date}
+                                    </span>
+                                </div>
 
-                                return null
-                            })}
-                        </div>
+                                {/* Title */}
+                                <h1 className="text-3xl md:text-4xl font-extrabold leading-tight tracking-tight">
+                                    {selectedNews.title}
+                                </h1>
 
-                        {/* Footer */}
-                        <div className="pt-6 border-t flex justify-between items-center text-sm text-muted-foreground">
-                            <span>Nguồn: {selectedNews.source}</span>
-                            <span>Tác giả: {selectedNews.author}</span>
-                        </div>
+                                {/* Image */}
+                                <figure className="space-y-2">
+                                    <img
+                                        src={selectedNews.image}
+                                        alt={selectedNews.title}
+                                        className="w-full max-h-[420px] rounded-xl object-cover shadow-md"
+                                    />
+                                    <figcaption className="text-sm text-muted-foreground italic">
+                                        {selectedNews.caption}
+                                    </figcaption>
+                                </figure>
+
+                                {/* Lead */}
+                                <p className="text-lg md:text-xl font-medium leading-relaxed text-gray-800 border-l-4 border-blue-500 pl-4">
+                                    {selectedNews.lead}
+                                </p>
+
+                                {/* Content */}
+                                <div className="space-y-6">
+                                    {selectedNews.content.map((item, index) => {
+                                        if (item.type === "text") {
+                                            return (
+                                                <p key={index} className="text-lg leading-relaxed">
+                                                    {item.value}
+                                                </p>
+                                            )
+                                        }
+
+                                        if (item.type === "image") {
+                                            return (
+                                                <figure key={index} className="space-y-2">
+                                                    <img
+                                                        src={item.src}
+                                                        alt=""
+                                                        className="w-full rounded-xl shadow-md"
+                                                    />
+                                                    {item.caption && (
+                                                        <figcaption className="text-sm text-muted-foreground italic">
+                                                            {item.caption}
+                                                        </figcaption>
+                                                    )}
+                                                </figure>
+                                            )
+                                        }
+
+                                        return null
+                                    })}
+                                </div>
+
+                                {/* Footer */}
+                                <div className="pt-6 border-t flex justify-between items-center text-sm text-muted-foreground">
+                                    <span>Nguồn: {selectedNews.source}</span>
+                                    <span>Tác giả: {selectedNews.author}</span>
+                                </div>
+                                <Link to={'/feedbacks'}>
+                                    <Button size="lg"
+                                        variant="sky" className="text-base font-bold border-sky-400 text-sky-900 hover:bg-sky-400 hover:text-white shadow-lg hover:scale-105 transition border-1">Gửi cảm nghĩ</Button>
+                                </Link>
+                            </>
+                        )}
                     </article>
-
                     {/* ===== SIDEBAR ===== */}
-                    <aside className="w-1/4 space-y-6">
-
+                    <aside className="md:w-1/4 space-y-6 mt-4 md:mt-0">
                         {/* Danh sách tin tức */}
                         <div className="bg-white border rounded-xl shadow-sm p-4">
                             <h3 className="text-sm font-bold mb-3 text-red-700 uppercase">
@@ -241,12 +281,11 @@ export default function NewsSection() {
                                 {NEWS_LIST.map((news) => (
                                     <div
                                         key={news.id}
-                                        onClick={() => setSelectedNews(news)}
-                                        className={`cursor-pointer rounded-lg transition ${
-                                            selectedNews.id === news.id
-                                                ? "bg-red-50 border border-red-200"
-                                                : "hover:bg-gray-50"
-                                        }`}
+                                        onClick={() => handleSelectNews(news)}
+                                        className={`cursor-pointer rounded-lg transition ${selectedNews.id === news.id
+                                            ? "bg-red-50 border border-red-200"
+                                            : "hover:bg-gray-50"
+                                            }`}
                                     >
                                         <NewsItem date={news.date} title={news.title} />
                                     </div>
