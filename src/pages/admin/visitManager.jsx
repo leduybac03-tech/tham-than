@@ -15,7 +15,6 @@ import {
     TableHead,
     TableCell,
 } from "../../components/ui/tabel"
-import { Badge } from "../../components/ui/badge"
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card"
 import { http } from "../../lib/http"
 import { TopHeader } from "../../components/TopHeader"
@@ -25,6 +24,7 @@ import { RenderStatus } from "../../lib/renderStatus"
 import FullScreenLoading from "../../components/Loading"
 
 export default function VisitManagePage() {
+    const [openSidebar, setOpenSidebar] = useState(false)
     const [visits, setVisits] = useState([])
 
     const fetchVisits = async () => {
@@ -48,22 +48,28 @@ export default function VisitManagePage() {
             alert("Lỗi cập nhật trạng thái")
         }
     }
-    if (!visits.length > 0) return <FullScreenLoading />
+
+    if (!visits.length) return <FullScreenLoading />
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-            <div className="max-w-7xl mx-auto">
-                <TopHeader />
-                <Sidebar />
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+            {/* Header + Sidebar */}
+            <TopHeader onMenuClick={() => setOpenSidebar(true)} />
+            <Sidebar
+                open={openSidebar}
+                onClose={() => setOpenSidebar(false)}
+            />
 
-                <div className="ml-[200px] py-10 mt-4">
+            {/* CONTENT */}
+            <div className="pt-16 md:ml-[16.666667%] px-4 md:px-6 py-10">
+                <div className="max-w-7xl mx-auto">
                     <Card>
                         <CardHeader>
                             <CardTitle>Quản lý đăng ký thăm thân</CardTitle>
                         </CardHeader>
 
                         <CardContent>
-                            {/* BẮT BUỘC: wrapper để scroll ngang */}
+                            {/* BẮT BUỘC: wrapper scroll ngang */}
                             <div className="relative overflow-x-auto">
                                 <Table className="min-w-[1600px]">
                                     <TableHeader>
@@ -82,7 +88,7 @@ export default function VisitManagePage() {
                                             {/* HEADER FIXED */}
                                             <TableHead
                                                 className="
-                          sticky right-0 z-30
+                          md:sticky right-0 z-30
                           bg-red-50
                           text-right
                           shadow-[-2px_0_6px_rgba(0,0,0,0.08)]
@@ -152,13 +158,13 @@ export default function VisitManagePage() {
 
                                                 {/* Trạng thái */}
                                                 <TableCell>
-                                                    <RenderStatus status={v.status}></RenderStatus>
+                                                    <RenderStatus status={v.status} />
                                                 </TableCell>
 
                                                 {/* CELL FIXED */}
                                                 <TableCell
                                                     className="
-                            sticky right-0 z-20
+                            md:sticky right-0 z-20
                             bg-red-50
                             text-right
                             shadow-[-2px_0_6px_rgba(0,0,0,0.08)]
@@ -201,6 +207,5 @@ export default function VisitManagePage() {
                 </div>
             </div>
         </div>
-
     )
 }

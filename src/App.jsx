@@ -16,32 +16,36 @@ import PostManager from "./pages/admin/postManager"
 import FeedbackPage from "./pages/FeedbackPage"
 import FeedbackManager from "./pages/admin/FeedbackManager"
 import FollowVisit from "./pages/FollowVisit"
+import { SidebarProvider } from "./context/SidebarContext"
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <SidebarProvider>
 
-        {/* ===== PUBLIC ===== */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/dang-ky" element={<DangKyPage />} />
-        <Route path="/feedbacks" element={<FeedbackPage />} />
-        <Route path="/theo-doi" element={<FollowVisit />} />
+      <BrowserRouter>
+        <Routes>
 
-        {/* ===== ADMIN LOGIN (PUBLIC) ===== */}
-        <Route path="/admin/login" element={<LoginPage />} />
+          {/* ===== PUBLIC ===== */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/dang-ky" element={<DangKyPage />} />
+          <Route path="/feedbacks" element={<FeedbackPage />} />
+          <Route path="/theo-doi" element={<FollowVisit />} />
 
-        {/* ===== ADMIN (BẢO VỆ) ===== */}
-        <Route element={<PrivateRoute />}>
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/thong-ke" element={<AdminThongKe />} />
-          <Route path="/admin/visits" element={<VisitManagePage />} />
-          <Route path="/admin/posts" element={<PostManager />} />
-          <Route path="/admin/feedbacks" element={<FeedbackManager />} />
+          {/* ===== ADMIN LOGIN (PUBLIC) ===== */}
+          <Route path="/admin/login" element={<LoginPage />} />
 
-        </Route>
+          {/* ===== ADMIN (BẢO VỆ) ===== */}
+          <Route element={<PrivateRoute />}>
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/thong-ke" element={<AdminThongKe />} />
+            <Route path="/admin/visits" element={<VisitManagePage />} />
+            <Route path="/admin/posts" element={<PostManager />} />
+            <Route path="/admin/feedbacks" element={<FeedbackManager />} />
 
-      </Routes>
-    </BrowserRouter>
+          </Route>
+
+        </Routes>
+      </BrowserRouter>
+    </SidebarProvider>
   )
 }

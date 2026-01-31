@@ -31,7 +31,7 @@ export function Header() {
             alt="Logo"
             className="md:w-[72px] w-[40px] p-2 transition-transform duration-300 group-hover:scale-105"
           />
-          <span className="text-[10px] leading-3 sm:inline-block text-lg md:font-extrabold tracking-wide text-yellow-100 drop-shadow">
+          <span className="text-[10px] md:text-xl leading-3 sm:inline-block text-lg md:font-extrabold tracking-wide text-yellow-100 drop-shadow">
             Quân khu 4 <br />
             <span className="md:text-2xl text-yellow-400">Lữ đoàn 283</span>
           </span>

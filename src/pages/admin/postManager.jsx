@@ -5,6 +5,8 @@ import {
     Trash2,
     Calendar,
     Image as ImageIcon,
+    Menu,
+    X
 } from "lucide-react"
 
 import Editor from "../../components/Editor"
@@ -30,6 +32,7 @@ export default function PostManager() {
 
     const [imageFile, setImageFile] = useState(null)
     const [imagePreview, setImagePreview] = useState("")
+
 
     const [form, setForm] = useState({
         title: "",
@@ -70,7 +73,6 @@ export default function PostManager() {
 
         let imageUrl = form.img
 
-        // upload ảnh nếu có
         if (imageFile) {
             const fd = new FormData()
             fd.append("image", imageFile)
@@ -84,10 +86,7 @@ export default function PostManager() {
             imageUrl = uploadRes.data.url
         }
 
-        const payload = {
-            ...form,
-            img: imageUrl,
-        }
+        const payload = { ...form, img: imageUrl }
 
         if (editing) {
             await http.put(`/posts/${currentId}`, payload)
@@ -123,7 +122,8 @@ export default function PostManager() {
             <TopHeader />
             <Sidebar />
 
-            <div className="ml-[220px] px-6 py-10 space-y-10">
+            {/* ===== CONTENT ===== */}
+            <div className="px-4 py-10 space-y-10 lg:ml-[220px] lg:px-6">
                 {/* ===== LIST ===== */}
                 <Card>
                     <CardHeader>
@@ -140,7 +140,7 @@ export default function PostManager() {
                         {posts.map((p) => (
                             <div
                                 key={p._id}
-                                className="flex items-center justify-between rounded-lg border p-4 hover:bg-muted transition"
+                                className="flex items-center justify-between gap-4 rounded-lg border p-4 hover:bg-muted transition"
                             >
                                 <div>
                                     <h4 className="font-semibold text-lg">{p.title}</h4>
@@ -150,7 +150,7 @@ export default function PostManager() {
                                     </div>
                                 </div>
 
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 shrink-0">
                                     <Button
                                         size="icon"
                                         variant="outline"
@@ -238,7 +238,7 @@ export default function PostManager() {
                             )}
                         </div>
 
-                        <div className="flex gap-3">
+                        <div className="flex gap-3 flex-wrap">
                             <Button
                                 className="bg-gradient-to-r from-red-700 to-yellow-600 text-white"
                                 onClick={handleSubmit}

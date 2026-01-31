@@ -46,19 +46,17 @@ const TIME_RANGE = {
 }
 
 export default function ThongKePage() {
-  const [stats, setStats] = useState(null)
+  const [openSidebar, setOpenSidebar] = useState(false)
 
+  const [stats, setStats] = useState(null)
   const [recentVisits, setRecentVisits] = useState([])
   const [unitStats, setUnitStats] = useState([])
 
-  /* === card filter === */
   const [selectedRange, setSelectedRange] = useState(TIME_RANGE.MONTH)
 
-  /* === popup soldier === */
   const [openSoldier, setOpenSoldier] = useState(null)
   const [soldierStats, setSoldierStats] = useState(null)
   const [soldierVisits, setSoldierVisits] = useState([])
-    
   const [loadingSoldier, setLoadingSoldier] = useState(false)
 
   /* ================== INIT ================== */
@@ -87,7 +85,7 @@ export default function ThongKePage() {
     setUnitStats(res.data)
   }
 
-  /* ================== POPUP SOLDIER ================== */
+  /* ================== SOLDIER POPUP ================== */
   const openSoldierPopup = async (soldier) => {
     setOpenSoldier(soldier)
     setLoadingSoldier(true)
@@ -105,27 +103,26 @@ export default function ThongKePage() {
     }
   }
 
-  /* ================== STATUS BADGE ================== */
   const getStatusBadge = (status) => {
     switch (status) {
       case "approved":
         return (
           <Badge className="bg-accent text-accent-foreground">
-            <CheckCircle2 className="mr-1 h-5 w-5" />
+            <CheckCircle2 className="mr-1 h-4 w-4" />
             Đã duyệt
           </Badge>
         )
       case "pending":
         return (
           <Badge variant="secondary">
-            <Clock className="mr-1 h-5 w-5" />
+            <Clock className="mr-1 h-4 w-4" />
             Chờ duyệt
           </Badge>
         )
       case "rejected":
         return (
           <Badge variant="destructive">
-            <XCircle className="mr-1 h-5 w-5" />
+            <XCircle className="mr-1 h-4 w-4" />
             Từ chối
           </Badge>
         )
@@ -144,14 +141,16 @@ export default function ThongKePage() {
   if (!stats) return <FullScreenLoading />
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-      <TopHeader />
-      <Sidebar />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Header + Sidebar */}
+      <TopHeader onMenuClick={() => setOpenSidebar(true)} />
+      <Sidebar open={openSidebar} onClose={() => setOpenSidebar(false)} />
 
-      <div className="ml-[200px] py-10">
-        <main className="container mx-auto px-4">
+      {/* CONTENT */}
+      <div className="pt-16 md:ml-[16.666667%] px-4 md:px-6 py-10">
+        <main className="max-w-7xl mx-auto">
 
-          {/* ================= HEADER ================= */}
+          {/* HEADER */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold">Thống Kê Thăm Thân</h1>
             <p className="text-muted-foreground">
@@ -159,7 +158,7 @@ export default function ThongKePage() {
             </p>
           </div>
 
-          {/* ================= STAT CARDS ================= */}
+          {/* STAT CARDS */}
           <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <StatCardClickable
               icon={<Calendar />}
@@ -192,14 +191,13 @@ export default function ThongKePage() {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-3">
-            {/* ================= VISITS TABLE ================= */}
+            {/* VISITS TABLE */}
             <Card className="lg:col-span-2">
               <CardHeader>
                 <CardTitle>{tableTitle[selectedRange]}</CardTitle>
                 <CardDescription>Danh sách đăng ký thăm thân</CardDescription>
               </CardHeader>
-
-              <CardContent>
+              <CardContent className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -210,7 +208,6 @@ export default function ThongKePage() {
                       <TableHead>Trạng thái</TableHead>
                     </TableRow>
                   </TableHeader>
-
                   <TableBody>
                     {recentVisits.map((v) => (
                       <TableRow key={v._id}>
@@ -218,15 +215,7 @@ export default function ThongKePage() {
                         <TableCell>
                           <button
                             onClick={() => openSoldierPopup(v.soldier)}
-                            className="
-                              inline-flex items-center gap-2
-                              rounded-lg px-3 py-1.5
-                              font-semibold text-yellow-600
-                              bg-yellow-400/10
-                              border border-yellow-400/30
-                              hover:bg-yellow-400 hover:text-black
-                              transition
-                            "
+                            className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 font-semibold text-yellow-700 bg-yellow-400/10 border hover:bg-yellow-400 hover:text-black transition"
                           >
                             {v.soldier.name}
                             <Eye className="h-4 w-4" />
@@ -242,7 +231,7 @@ export default function ThongKePage() {
               </CardContent>
             </Card>
 
-            {/* ================= UNIT STATS ================= */}
+            {/* UNIT STATS */}
             <Card>
               <CardHeader>
                 <CardTitle>Thống kê theo đơn vị</CardTitle>
@@ -272,122 +261,6 @@ export default function ThongKePage() {
           </div>
         </main>
       </div>
-
-      {/* ================= POPUP SOLDIER ================= */}
-      {openSoldier && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-3xl rounded-lg bg-white p-6 shadow-lg">
-            <div className="mb-4 flex justify-between items-center">
-              <h2 className="text-xl font-bold">
-                Thống kê thăm thân – {openSoldier.name}
-              </h2>
-              <button
-                onClick={() => {
-                  setOpenSoldier(null)
-                  setSoldierStats(null)
-                  setSoldierVisits([])
-                }}
-              >
-                ✕
-              </button>
-            </div>
-
-            {loadingSoldier ? (
-              <FullScreenLoading />
-            ) : (
-              <>
-                {soldierStats && (
-                  <div className="mb-6 grid grid-cols-2 gap-4">
-                    <StatCard icon={<Calendar />} title="Trong tháng" value={soldierStats.visitsThisMonth} />
-                    <StatCard icon={<BarChart3 />} title="Trong năm" value={soldierStats.visitsThisYear} />
-                  </div>
-                )}
-
-                <Table className="min-w-[1200px]">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Người thăm</TableHead>
-                      <TableHead>CCCD</TableHead>
-                      <TableHead>Quan hệ</TableHead>
-                      <TableHead>Địa chỉ</TableHead>
-                      <TableHead>Thời gian</TableHead>
-                      <TableHead>Số người</TableHead>
-                      <TableHead>Mục đích</TableHead>
-                      <TableHead>Trạng thái</TableHead>
-                    </TableRow>
-                  </TableHeader>
-
-                  <TableBody>
-                    {soldierVisits.map((v) => (
-                      <TableRow key={v._id}>
-                        {/* Người thăm */}
-                        <TableCell>
-                          <div className="font-medium">{v.fullName}</div>
-                          <div className="text-sm text-muted-foreground">
-                            📞 {v.phoneNumber}
-                          </div>
-                        </TableCell>
-
-                        {/* CCCD */}
-                        <TableCell>{v.cccd}</TableCell>
-
-                        {/* Quan hệ */}
-                        <TableCell>
-                          {getRelationshipLabel(v.relationship)}
-                        </TableCell>
-
-                        {/* Địa chỉ */}
-                        <TableCell className="max-w-[200px] truncate">
-                          {v.address}
-                        </TableCell>
-
-                        {/* Thời gian */}
-                        <TableCell>
-                          {formatVisit(v.dateVisit, v.timeVisit)}
-                        </TableCell>
-
-                        {/* Số người */}
-                        <TableCell>
-                          {v.howManyPeople || 1}
-                          {v.whoPeople && (
-                            <div className="text-sm text-muted-foreground">
-                              ({v.whoPeople})
-                            </div>
-                          )}
-                        </TableCell>
-
-                        {/* Mục đích */}
-                        <TableCell className="max-w-[200px] truncate">
-                          {v.mucDichVisit || "—"}
-                        </TableCell>
-
-                        {/* Trạng thái */}
-                        <TableCell>
-                          {getStatusBadge
-                            ? getStatusBadge(v.status)
-                            : <RenderStatus status={v.status}></RenderStatus>}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-
-                    {soldierVisits.length === 0 && (
-                      <TableRow>
-                        <TableCell
-                          colSpan={8}
-                          className="text-center text-muted-foreground py-6"
-                        >
-                          Không có dữ liệu thăm thân
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-
-              </>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   )
 }
